@@ -7,7 +7,7 @@ CLI Tools for Elgg
 
 ## Run Commands
 
-``sh
+```sh
 
 cd /path/to/elgg/
 
