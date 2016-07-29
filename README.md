@@ -4,10 +4,21 @@ CLI Tools for Elgg
 
 ## Installation
 
+### Project Scope
+
 ```sh
 cd /path/to/elgg/
+composer require hypejunction/elgg-cli:~1.0
+vendor/bin/elgg-cli --help
+```
 
-composer require hypejunction/elgg-cli:dev-master
+### Global Scope
+
+```sh
+composer global require hypejunction/elgg-cli:~1.0
+cd /path/to/elgg
+# if you have composer bin in your environment variables use the shortcut
+elgg-cli --help
 ```
 
 ## Run Commands
