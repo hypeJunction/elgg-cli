@@ -4,6 +4,7 @@
     "require": {
         "symfony/console": "^3.1"
     },
+	"minimum-stability": "dev",
     "license": "GPL-2.0",
     "authors": [
         {
@@ -13,7 +14,8 @@
     ],
 	"autoload": {
 		"psr-0": {
-			"": "classes/"
+			"": "src/"
 		}
-	}
+	},
+	"bin": ["elgg-cli"]
 }

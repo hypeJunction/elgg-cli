@@ -1,0 +1,29 @@
+#!/usr/bin/env php
+<?php
+
+$files = [
+	__DIR__ . '/../../autoload.php',
+	__DIR__ . '/../vendor/autoload.php',
+	__DIR__ . '/vendor/autoload.php'
+];
+foreach ($files as $file) {
+	if (file_exists($file)) {
+		require $file;
+		break;
+	}
+	fwrite('Composer dependencies are not installed');
+	die(1);
+}
+
+use Elgg\CLI\AddUserCommand;
+use Elgg\CLI\ConfigDatarootCommand;
+use Elgg\CLI\ConfigPathCommand;
+use Elgg\CLI\SiteUrlCommand;
+use Symfony\Component\Console\Application;
+
+$application = new Application('elgg-cli');
+$application->add(new AddUserCommand());
+$application->add(new SiteUrlCommand());
+$application->add(new ConfigDatarootCommand());
+$application->add(new ConfigPathCommand());
+$application->run();
