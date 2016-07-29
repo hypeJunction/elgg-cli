@@ -46,11 +46,3 @@ vendor/bin/elgg-cli config:dataroot <new_path>
 
 ```
 
-## Compiling a new build
-
-To compile a new build, you first need to install box:
-
-```sh
-composer global require kherge/box --prefer-source
-```
-
