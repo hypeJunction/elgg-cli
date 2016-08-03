@@ -1,6 +1,11 @@
 #!/usr/bin/env php
 <?php
 
+if (PHP_SAPI !== 'cli') {
+	echo "You must use the command line to run this script.\n";
+	exit(1);
+}
+
 $files = [
 	__DIR__ . '/../../autoload.php',
 	__DIR__ . '/../vendor/autoload.php',
@@ -11,19 +16,17 @@ foreach ($files as $file) {
 		require $file;
 		break;
 	}
-	fwrite('Composer dependencies are not installed');
-	die(1);
+	fwrite("Composer dependencies are not installed.\n");
+	die(2);
 }
 
-use Elgg\CLI\AddUserCommand;
-use Elgg\CLI\ConfigDatarootCommand;
-use Elgg\CLI\ConfigPathCommand;
-use Elgg\CLI\SiteUrlCommand;
-use Symfony\Component\Console\Application;
+$json = file_get_contents(__DIR__ . "/package.json");
+$app = json_decode($json);
 
-$application = new Application('elgg-cli');
-$application->add(new AddUserCommand());
-$application->add(new SiteUrlCommand());
-$application->add(new ConfigDatarootCommand());
-$application->add(new ConfigPathCommand());
-$application->run();
+if (!$app) {
+	fwrite("Can not read package.json.\n");
+	die(3);
+}
+
+$cli = new \Symfony\Component\Console\Application($app->name, $app->version);
+(new \Elgg\CLI($cli))->run();

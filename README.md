@@ -32,8 +32,23 @@ vendor/bin/elgg-cli --help
 # List all commands
 vendor/bin/elgg-cli list
 
+# Install Elgg
+vendor/bin/elgg-cli install
+
+# Flush caches
+vendor/bin/elgg-cli site:flush_cache
+
+# Run upgrades
+vendor/bin/elgg-cli site:upgrade
+
+# Activate plugins
+vendor/bin/elgg-cli plugins:activate [--all]
+
+# Deactivate plugins
+vendor/bin/elgg-cli plugins:deactivate [--all]
+
 # Add a new user
-vendor/bin/elgg-cli user:add [--admin] [--notify] <username> <name> <email>
+vendor/bin/elgg-cli user:add [--admin] [--notify]
 
 # Display or change site URL
 vendor/bin/elgg-cli site:url <new_url>

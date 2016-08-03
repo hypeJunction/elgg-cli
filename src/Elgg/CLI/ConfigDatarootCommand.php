@@ -2,52 +2,47 @@
 
 namespace Elgg\CLI;
 
-use Elgg\Application;
-use Exception;
-use Symfony\Component\Console\Command\Command;
+use RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * config:dataroot CLI command
  */
 class ConfigDatarootCommand extends Command {
 
+	/**
+	 * {@inheritdoc}
+	 */
 	protected function configure() {
 		$this->setName('config:dataroot')
 				->setDescription('Display or change data directory path')
 				->addArgument('path', InputArgument::OPTIONAL, 'New data directory path');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function handle() {
 
-		Application::start();
+		$path = $this->argument('path');
 
-		$path = $input->getArgument('path');
+		if ($path) {
+			// make sure the path ends with a slash
+			$path = rtrim($path, DIRECTORY_SEPARATOR);
+			$path .= DIRECTORY_SEPARATOR;
 
-		try {
-
-			if ($path) {
-				// make sure the path ends with a slash
-				$path = rtrim($path, DIRECTORY_SEPARATOR);
-				$path .= DIRECTORY_SEPARATOR;
-
-				if (!is_dir($path)) {
-					throw new Exception("$path is not a valid directory");
-				}
-				
-				if (datalist_set('dataroot', $path)) {
-					$output->writeln("Data directory path has been changed");
-				} else {
-					$output->writeln("Data directory path could not be changed");
-				}
+			if (!is_dir($path)) {
+				throw new RuntimeException("$path is not a valid directory");
 			}
-			$output->writeln("Current data directory path: " . datalist_get('dataroot'));
-		} catch (Exception $ex) {
-			$output->writeln("Exception: " . $ex->getMessage());
-			return;
+
+			if (datalist_set('dataroot', $path)) {
+				system_message("Data directory path has been changed");
+			} else {
+				system_message("Data directory path could not be changed");
+			}
 		}
+
+		system_message("Current data directory path: " . datalist_get('dataroot'));
 	}
 
 }
