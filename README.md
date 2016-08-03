@@ -61,3 +61,16 @@ vendor/bin/elgg-cli config:dataroot <new_path>
 
 ```
 
+## Custom Commands
+
+Plugins can add their commands to the CLI application, by adding command class name via
+`'commands','cli'` hoook. Command class must extend `\Symfony\Component\Console\Command\Command`.
+
+```php
+class MyCommand extends \Symfony\Component\Console\Command\Command {}
+
+elgg_register_plugin_hook_handler('commands', 'cli', function($hook, $type, $return) {
+	$return[] = MyCommand::class;
+	return $return;
+});
+```
