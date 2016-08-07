@@ -42,7 +42,6 @@ abstract class Command extends SymfonyCommand {
 					$this->write("<error>$msg</error>");
 				}
 			}
-			return false;
 		};
 
 		elgg_register_plugin_hook_handler('forward', 'all', $dump_message_registers);
