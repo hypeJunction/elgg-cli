@@ -30,7 +30,6 @@ class RouteCommand extends Command {
 	protected function handle() {
 
 		$uri = '/' . ltrim($this->argument('uri'), '/');
-		$ajax = (int) $this->argument('ajax');
 		$method = $this->argument('method');
 		$add_csrf_tokens = $this->option('tokens');
 
