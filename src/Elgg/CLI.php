@@ -52,6 +52,7 @@ class CLI {
 			PluginsDeactivateCommand::class,
 			RouteCommand::class,
 			ActionCommand::class,
+			CLI\EntitiesGetCommand::class,
 		];
 	}
 
