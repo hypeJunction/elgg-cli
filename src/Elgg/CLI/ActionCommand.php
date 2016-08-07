@@ -51,6 +51,12 @@ class ActionCommand extends Command {
 		elgg_set_viewtype('json');
 
 		Application::index();
+
+		if (version_compare(elgg_get_version(true), '2.3')) {
+			$response = _elgg_services()->responseFactory->getSentResponse();
+			$json = json_decode($response->getContent());
+			dump($json);
+		}
 	}
 
 }

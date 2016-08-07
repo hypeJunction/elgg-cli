@@ -36,6 +36,10 @@ abstract class Command extends SymfonyCommand {
 
 		elgg_register_plugin_hook_handler('forward', 'all', [$this, 'dumpRegisters']);
 
+		if (version_compare(elgg_get_version(true), '2.3')) {
+			elgg_register_event_handler('send:before', 'http_response', [\Elgg\Values::class, 'getFalse']);
+		}
+
 		$this->login();
 
 		$result = $this->handle();
