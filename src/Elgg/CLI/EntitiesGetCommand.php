@@ -53,8 +53,8 @@ class EntitiesGetCommand extends Command {
 				$entity->guid,
 				$entity->getDisplayName(),
 				elgg_get_excerpt($entity->descriptin),
-				$owner = $entity->getOwnerEntity() ? $owner->getDisplayName() . ' [guid: ' . $owner->guid . ']' : '',
-				$container = $entity->getContainerEntity() ? $container->getDisplayName() . ' [guid: ' . $container->guid . ']' : '',
+				($owner = $entity->getOwnerEntity()) ? $owner->getDisplayName() . ' [guid: ' . $owner->guid . ']' : '',
+				($container = $entity->getContainerEntity()) ? $container->getDisplayName() . ' [guid: ' . $container->guid . ']' : '',
 				get_readable_access_level($entity->access_id) . ' [' . $entity->access_id . ']',
 			]);
 		}
