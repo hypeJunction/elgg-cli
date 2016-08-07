@@ -6,10 +6,11 @@ if (PHP_SAPI !== 'cli') {
 	exit(1);
 }
 
+$dir = getcwd();
 $files = [
-	__DIR__ . '/../../autoload.php',
-	__DIR__ . '/../vendor/autoload.php',
-	__DIR__ . '/vendor/autoload.php'
+	$dir . '/../../autoload.php',
+	$dir . '/../vendor/autoload.php',
+	$dir . '/vendor/autoload.php'
 ];
 foreach ($files as $file) {
 	if (file_exists($file)) {
