@@ -131,7 +131,7 @@ abstract class Command extends SymfonyCommand {
 	 * @throws RuntimeException
 	 */
 	final public function login() {
-		if (!$this->getDefinition()->hasArgument('as')) {
+		if (!$this->getDefinition()->hasOption('as')) {
 			return;
 		}
 		$username = $this->option('as');
