@@ -68,8 +68,8 @@ vendor/bin/elgg-cli action <action_name> [--as]
 # Run cron
 vendor/bin/elgg-cli route cron/run
 
-# List entities
-vendor/bin/elgg-cli entities:get [--guid] [--type] [--subtype] [--limit] [--offset]
+# List/search entities
+vendor/bin/elgg-cli entities:get [--guid] [--type] [--subtype] [--limit] [--offset] [--keyword] [--full-view]
 ```
 
 ## Custom Commands
