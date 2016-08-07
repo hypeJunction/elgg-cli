@@ -45,7 +45,7 @@ abstract class Command extends SymfonyCommand {
 			return false;
 		};
 
-		elgg_register_plugin_hook_handler('forward', 'all', $dump_message_registers());
+		elgg_register_plugin_hook_handler('forward', 'all', $dump_message_registers);
 
 		// Allow calling action()
 		// $ts = time();
