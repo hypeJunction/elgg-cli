@@ -35,10 +35,7 @@ abstract class Command extends SymfonyCommand {
 		$this->output = $output;
 
 		elgg_register_plugin_hook_handler('forward', 'all', [$this, 'dumpRegisters']);
-
-		if (version_compare(elgg_get_version(true), '2.3')) {
-			elgg_register_event_handler('send:before', 'http_response', [\Elgg\Values::class, 'getFalse']);
-		}
+		elgg_register_event_handler('send:before', 'http_response', [$this, 'dumpData']);
 
 		$this->login();
 
@@ -166,8 +163,8 @@ abstract class Command extends SymfonyCommand {
 	 * Dump and output system and error messages
 	 * @return void
 	 */
-	function dumpRegisters() {
-		$set = _elgg_services()->systemMessages->dumpRegisters();
+	public function dumpRegisters() {
+		$set = _elgg_services()->systemMessages->loadRegisters();
 
 		foreach ($set as $prop => $values) {
 			if (!empty($values)) {
@@ -177,6 +174,21 @@ abstract class Command extends SymfonyCommand {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Dump response data
+	 *
+	 * @param string $event
+	 * @param string $type
+	 * @param \Symfony\Component\HttpFoundation\Response $response
+	 * @return boolean
+	 */
+	public function dumpData($event, $type, $response) {
+		$content = $response->getContent();
+		$json = @json_decode($content);
+		$json ? dump($json) : dump($content);
+		return false;
 	}
 
 }

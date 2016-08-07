@@ -19,6 +19,7 @@ class ActionCommand extends Command {
 		$this->setName('action')
 				->setDescription('Execute an action')
 				->addArgument('action_name', InputArgument::REQUIRED, 'Name of the action')
+				->addOption('query', null, InputOption::VALUE_OPTIONAL, 'Query string')
 				->addOption('as', null, InputOption::VALUE_OPTIONAL, 'Username of the user to login');
 	}
 
@@ -28,20 +29,21 @@ class ActionCommand extends Command {
 	protected function handle() {
 
 		$action = trim($this->argument('action_name'), '/');
+
+		$path_key = Application::GET_PATH_KEY;
 		$uri = "action/$action";
 
-		$site_url = elgg_get_site_url();
-		$uri = elgg_normalize_url($uri);
-		$path_key = Application::GET_PATH_KEY;
-
 		$parameters = [];
+
+		$query = trim((string) $this->option('query'), '?');
+		parse_str($query, $parameters);
 
 		$ts = time();
 		$parameters['__elgg_ts'] = $ts;
 		$parameters['__elgg_token'] = _elgg_services()->actions->generateActionToken($ts);
 
 		$request = Request::create("?$path_key=" . urlencode($uri), 'POST', $parameters);
-
+		
 		$cookie_name = _elgg_services()->config->getCookieConfig()['session']['name'];
 		$session_id = _elgg_services()->session->getId();
 		$request->cookies->set($cookie_name, $session_id);
@@ -52,12 +54,6 @@ class ActionCommand extends Command {
 
 		_elgg_services()->setValue('request', $request);
 		Application::index();
-
-		if (version_compare(elgg_get_version(true), '2.3')) {
-			$response = _elgg_services()->responseFactory->getSentResponse();
-			$json = json_decode($response->getContent());
-			dump($json);
-		}
 	}
 
 }

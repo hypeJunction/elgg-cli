@@ -22,6 +22,7 @@ class RouteCommand extends Command {
 				->addArgument('method', InputArgument::OPTIONAL, 'HTTP method', 'GET')
 				->addOption('tokens', null, InputOption::VALUE_NONE, 'Add CSRF tokens to the request')
 				->addOption('export', null, InputOption::VALUE_NONE, 'Attempt to export entity data on the page')
+				->addOption('query', null, InputOption::VALUE_OPTIONAL, 'Query string')
 				->addOption('as', null, InputOption::VALUE_OPTIONAL, 'Username of the user to login');
 	}
 
@@ -31,7 +32,7 @@ class RouteCommand extends Command {
 	protected function handle() {
 
 		$uri = '/' . ltrim($this->argument('uri'), '/');
-		$method = $this->argument('method');
+		$method = $this->argument('method') ? : 'GET';
 		$add_csrf_tokens = $this->option('tokens');
 
 		$site_url = elgg_get_site_url();
@@ -39,6 +40,10 @@ class RouteCommand extends Command {
 		$path_key = Application::GET_PATH_KEY;
 
 		$parameters = [];
+
+		$query = trim((string) $this->option('query'), '?');
+		parse_str($query, $parameters);
+
 		if ($add_csrf_tokens) {
 			$ts = time();
 			$parameters['__elgg_ts'] = $ts;
@@ -60,7 +65,6 @@ class RouteCommand extends Command {
 
 		_elgg_services()->setValue('request', $request);
 		Application::index();
-		
 	}
 
 }
