@@ -1,23 +1,33 @@
 #!/usr/bin/env php
 <?php
-
 if (PHP_SAPI !== 'cli') {
 	echo "You must use the command line to run this script.\n";
-	exit(1);
+	die(1);
 }
 
 $dir = getcwd();
+fwrite(STDERR, $dir . "\n");
+
 $files = [
+	// Own dependencies
+	__DIR__ . '/../../autoload.php',
+	__DIR__ . '/../vendor/autoload.php',
+	__DIR__ . '/vendor/autoload.php',
+	// Elgg installation (in case elgg-cli is installed globally)
 	$dir . '/../../autoload.php',
 	$dir . '/../vendor/autoload.php',
-	$dir . '/vendor/autoload.php'
+	$dir . '/vendor/autoload.php',
 ];
+
 foreach ($files as $file) {
 	if (file_exists($file)) {
-		require $file;
-		break;
+		require_once $file;
 	}
-	fwrite("Composer dependencies are not installed.\n");
+}
+
+if (!class_exists('\Elgg\Application') || !class_exists('\Symfony\Component\Console\Application')) {
+	fwrite(STDERR, "Composer dependencies are not installed "
+			. "or you are trying to run the script outside of an Elgg installation's root directory.\n");
 	die(2);
 }
 
@@ -25,7 +35,7 @@ $json = file_get_contents(__DIR__ . "/package.json");
 $app = json_decode($json);
 
 if (!$app) {
-	fwrite("Can not read package.json.\n");
+	fwrite(STDERR, "Can not read package.json.\n");
 	die(3);
 }
 
