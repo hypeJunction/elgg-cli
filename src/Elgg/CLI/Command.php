@@ -167,7 +167,7 @@ abstract class Command extends SymfonyCommand {
 	 * @return void
 	 */
 	function dumpRegisters() {
-		$set = _elgg_services()->systemMessages->loadRegisters();
+		$set = _elgg_services()->systemMessages->dumpRegisters();
 
 		foreach ($set as $prop => $values) {
 			if (!empty($values)) {
