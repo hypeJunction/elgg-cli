@@ -8,6 +8,7 @@ use Elgg\CLI\ConfigPathCommand;
 use Elgg\CLI\InstallCommand;
 use Elgg\CLI\PluginsActivateCommand;
 use Elgg\CLI\PluginsDeactivateCommand;
+use Elgg\CLI\RouteCommand;
 use Elgg\CLI\SiteFlushCacheCommand;
 use Elgg\CLI\SiteUpgradeCommand;
 use Elgg\CLI\SiteUrlCommand;
@@ -48,7 +49,7 @@ class CLI {
 			AddUserCommand::class,
 			PluginsActivateCommand::class,
 			PluginsDeactivateCommand::class,
-			RoouteCommand::class,
+			RouteCommand::class,
 		];
 	}
 
