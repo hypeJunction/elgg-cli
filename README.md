@@ -65,6 +65,8 @@ vendor/bin/elgg-cli route <uri> <method> [--tokens] [--export] [--as]
 # Execute an action
 vendor/bin/elgg-cli action <action_name> [--as]
 
+# Run cron
+vendor/bin/elgg-cli route cron/run
 ```
 
 ## Custom Commands
