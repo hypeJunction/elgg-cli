@@ -25,7 +25,6 @@ abstract class Command extends SymfonyCommand {
 
 	public function __construct($name = null) {
 		parent::__construct($name);
-		$this->addOption('as', null, \Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, 'Username of the user to login for this command');
 	}
 
 	/**
@@ -35,40 +34,16 @@ abstract class Command extends SymfonyCommand {
 		$this->input = $input;
 		$this->output = $output;
 
-		$dump_message_registers = function() {
-			$msgs = _elgg_services()->systemMessages->dumpRegister();
-			if (!empty($msgs['success'])) {
-				foreach ($msgs['success'] as $msg) {
-					$this->write("<info>$msg</info>");
-				}
-			}
-			if (!empty($msgs['error'])) {
-				foreach ($msgs['error'] as $msg) {
-					$this->write("<error>$msg</error>");
-				}
-			}
-		};
+		elgg_register_plugin_hook_handler('forward', 'all', [$this, 'dumpRegisters']);
 
-		elgg_register_plugin_hook_handler('forward', 'all', $dump_message_registers);
-
-		$username = $this->option('as');
-		if ($username) {
-			$user = get_user_by_username($username);
-			if (!$user) {
-				throw new \RuntimeException("User with username $username not found");
-			}
-			if (!login($user)) {
-				throw new \RuntimeException("Unable to login as $username");
-			}
-			system_message("Logged in as $username [guid: $user->guid]");
-		}
+		$this->login();
 
 		$result = $this->handle();
 
-		$dump_message_registers();
+		$this->dumpRegisters();
 
-		logout();
-		
+		$this->logout();
+
 		return $result;
 	}
 
@@ -148,6 +123,56 @@ abstract class Command extends SymfonyCommand {
 			throw new RuntimeException('Please enter a required answer');
 		}
 		return $answer;
+	}
+
+	/**
+	 * Login a user defined by --as option
+	 * @return void
+	 * @throws RuntimeException
+	 */
+	final public function login() {
+		if (!$this->getDefinition()->hasArgument('as')) {
+			return;
+		}
+		$username = $this->option('as');
+		if (!$username) {
+			return;
+		}
+		$user = get_user_by_username($username);
+		if (!$user) {
+			throw new RuntimeException("User with username $username not found");
+		}
+		if (!login($user)) {
+			throw new RuntimeException("Unable to login as $username");
+		}
+		system_message("Logged in as $username [guid: $user->guid]");
+	}
+
+	/**
+	 * Logout a user
+	 * @return void
+	 */
+	final public function logout() {
+		if (elgg_is_logged_in()) {
+			logout();
+		}
+	}
+
+	/**
+	 * Dump and output system and error messages
+	 * @return void
+	 */
+	function dumpRegisters() {
+		$set = _elgg_services()->systemMessages->loadRegisters();
+
+		foreach ($set as $prop => $values) {
+			if (!empty($values)) {
+				foreach ($values as $msg) {
+					$tag = $prop == 'error' ? 'error' : 'info';
+					$this->write(elgg_format_element($tag, [], $msg));
+				}
+			}
+		}
 	}
 
 }

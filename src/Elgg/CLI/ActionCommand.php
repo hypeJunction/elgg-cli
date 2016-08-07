@@ -18,7 +18,8 @@ class RouteCommand extends Command {
 	protected function configure() {
 		$this->setName('action')
 				->setDescription('Execute an action')
-				->addArgument('action_name', InputArgument::REQUIRED, 'Name of the action');
+				->addArgument('action_name', InputArgument::REQUIRED, 'Name of the action')
+				->addOption('as', null, InputOption::VALUE_OPTIONAL, 'Username of the user to login');
 	}
 
 	/**
@@ -49,12 +50,7 @@ class RouteCommand extends Command {
 		$request->headers->set('X-Elgg-Ajax-API', 2);
 		elgg_set_viewtype('json');
 
-		ob_start();
 		Application::index();
-		$output = ob_get_clean();
-
-		$json = json_decode($output);
-		$this->write(var_export($json, true));
 	}
 
 }
