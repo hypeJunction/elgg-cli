@@ -6,8 +6,6 @@ if (PHP_SAPI !== 'cli') {
 }
 
 $dir = getcwd();
-fwrite(STDERR, $dir . "\n");
-
 $files = [
 	// Own dependencies
 	__DIR__ . '/../../autoload.php',
