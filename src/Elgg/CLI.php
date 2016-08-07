@@ -48,6 +48,7 @@ class CLI {
 			AddUserCommand::class,
 			PluginsActivateCommand::class,
 			PluginsDeactivateCommand::class,
+			RoouteCommand::class,
 		];
 	}
 

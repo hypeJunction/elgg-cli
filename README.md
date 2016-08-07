@@ -59,6 +59,9 @@ vendor/bin/elgg-cli config:path <new_path>
 # Display or change data directory path
 vendor/bin/elgg-cli config:dataroot <new_path>
 
+# Request a page/action
+vendor/bin/elgg-cli route <uri> <ajax> [--tokens]
+
 ```
 
 ## Custom Commands
