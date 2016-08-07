@@ -27,7 +27,7 @@ class ActionCommand extends Command {
 	 */
 	protected function handle() {
 
-		$action = trim($this->argument('action'), '/');
+		$action = trim($this->argument('action_name'), '/');
 		$uri = "action/$action";
 
 		$site_url = elgg_get_site_url();
