@@ -21,7 +21,9 @@ class RouteCommand extends Command {
 				->addArgument('uri', InputArgument::REQUIRED, 'URI of the request (route path)')
 				->addArgument('ajax', InputArgument::OPTIONAL, 'AJAX api version (0 for non-ajax)', 0)
 				->addArgument('method', InputArgument::OPTIONAL, 'HTTP method', 'GET')
-				->addOption('tokens', null, InputOption::VALUE_NONE, 'Add CSRF tokens to the request');
+				->addOption('tokens', null, InputOption::VALUE_NONE, 'Add CSRF tokens to the request')
+				->addOption('json', null, InputOption::VALUE_NONE, 'Set viewtype to JSON')
+				->addOption('bypass-walled-garden', null, InputOption::VALUE_NONE, 'Bypass walled garden');
 	}
 
 	/**
@@ -29,7 +31,7 @@ class RouteCommand extends Command {
 	 */
 	protected function handle() {
 
-		$uri = $this->argument('uri');
+		$uri = '/' . ltrim($this->argument('uri'), '/');
 		$ajax = (int) $this->argument('ajax');
 		$method = $this->argument('method');
 		$add_csrf_tokens = $this->option('tokens');
@@ -45,6 +47,10 @@ class RouteCommand extends Command {
 			$parameters['__elgg_token'] = _elgg_services()->actions->generateActionToken($ts);
 		}
 
+		if ($this->option('bypass-walled-garden')) {
+			elgg_set_config('walled_garden', false);
+		}
+
 		$request = Request::create("?$path_key=" . urlencode($uri), $method, $parameters);
 
 		$cookie_name = _elgg_services()->config->getCookieConfig()['session']['name'];
@@ -58,6 +64,10 @@ class RouteCommand extends Command {
 			if ($ajax >= 2) {
 				$request->headers->set('X-Elgg-Ajax-API', (string) $ajax);
 			}
+		}
+
+		if ($this->option('json')) {
+			elgg_set_viewtype('json');
 		}
 
 		_elgg_services()->setValue('request', $request);
