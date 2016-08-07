@@ -19,11 +19,9 @@ class RouteCommand extends Command {
 		$this->setName('route')
 				->setDescription('Route a request for a given path')
 				->addArgument('uri', InputArgument::REQUIRED, 'URI of the request (route path)')
-				->addArgument('ajax', InputArgument::OPTIONAL, 'AJAX api version (0 for non-ajax)', 0)
 				->addArgument('method', InputArgument::OPTIONAL, 'HTTP method', 'GET')
 				->addOption('tokens', null, InputOption::VALUE_NONE, 'Add CSRF tokens to the request')
-				->addOption('json', null, InputOption::VALUE_NONE, 'Set viewtype to JSON')
-				->addOption('bypass-walled-garden', null, InputOption::VALUE_NONE, 'Bypass walled garden');
+				->addOption('export', null, InputOption::VALUE_NONE, 'Attempt to export entity data on the page');
 	}
 
 	/**
@@ -47,31 +45,31 @@ class RouteCommand extends Command {
 			$parameters['__elgg_token'] = _elgg_services()->actions->generateActionToken($ts);
 		}
 
-		if ($this->option('bypass-walled-garden')) {
-			elgg_set_config('walled_garden', false);
-		}
-
 		$request = Request::create("?$path_key=" . urlencode($uri), $method, $parameters);
 
 		$cookie_name = _elgg_services()->config->getCookieConfig()['session']['name'];
 		$session_id = _elgg_services()->session->getId();
 		$request->cookies->set($cookie_name, $session_id);
 
-		$request->headers->set('Referer', elgg_normalize_url('cli'));
+		$request->headers->set('Referer', elgg_normalize_url());
 
-		if ($ajax) {
-			$request->headers->set('X-Requested-With', 'XMLHttpRequest');
-			if ($ajax >= 2) {
-				$request->headers->set('X-Elgg-Ajax-API', (string) $ajax);
-			}
-		}
-
-		if ($this->option('json')) {
+		if ($this->option('export')) {
 			elgg_set_viewtype('json');
+			$request->headers->set('X-Elgg-Ajax-API', '2');
 		}
 
 		_elgg_services()->setValue('request', $request);
+
+		ob_start();
 		Application::index();
+		$output = ob_get_clean();
+
+		if ($this->option('export')) {
+			$json = json_decode($output);
+			$this->write(var_export($json, true));
+		} else {
+			$this->write($output);
+		}
 	}
 
 }

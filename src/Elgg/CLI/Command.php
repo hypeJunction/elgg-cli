@@ -23,6 +23,11 @@ abstract class Command extends SymfonyCommand {
 	 */
 	protected $output;
 
+	public function __construct($name = null) {
+		parent::__construct($name);
+		$this->addOption('as', null, \Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, 'Username of the user to login for this command');
+	}
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -46,16 +51,24 @@ abstract class Command extends SymfonyCommand {
 
 		elgg_register_plugin_hook_handler('forward', 'all', $dump_message_registers);
 
-		// Allow calling action()
-		// $ts = time();
-		// $token = generate_action_token($ts);
-		// set_input('__elgg_ts', $ts);
-		// set_input('__elgg_token', $token);
+		$username = $this->option('as');
+		if ($username) {
+			$user = get_user_by_username($username);
+			if (!$user) {
+				throw new \RuntimeException("User with username $username not found");
+			}
+			if (!login($user)) {
+				throw new \RuntimeException("Unable to login as $username");
+			}
+			system_message("Logged in as $username [guid: $user->guid]");
+		}
 
 		$result = $this->handle();
 
 		$dump_message_registers();
 
+		logout();
+		
 		return $result;
 	}
 

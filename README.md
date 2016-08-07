@@ -60,7 +60,11 @@ vendor/bin/elgg-cli config:path <new_path>
 vendor/bin/elgg-cli config:dataroot <new_path>
 
 # Request a page
-vendor/bin/elgg-cli route <uri> <ajax> <method> [--tokens] [--json] [--bypass-walled-garden]
+vendor/bin/elgg-cli route <uri> <method> [--tokens] [--export] [--as]
+
+# Execute an action
+vendor/bin/elgg-cli action <action_name> [--as]
+
 ```
 
 ## Custom Commands
