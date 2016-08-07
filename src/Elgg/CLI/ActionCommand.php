@@ -50,6 +50,7 @@ class ActionCommand extends Command {
 		$request->headers->set('X-Elgg-Ajax-API', 2);
 		elgg_set_viewtype('json');
 
+		_elgg_services()->setValue('request', $request);
 		Application::index();
 
 		if (version_compare(elgg_get_version(true), '2.3')) {
