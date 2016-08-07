@@ -2,6 +2,7 @@
 
 namespace Elgg;
 
+use Elgg\CLI\ActionCommand;
 use Elgg\CLI\AddUserCommand;
 use Elgg\CLI\ConfigDatarootCommand;
 use Elgg\CLI\ConfigPathCommand;
@@ -50,6 +51,7 @@ class CLI {
 			PluginsActivateCommand::class,
 			PluginsDeactivateCommand::class,
 			RouteCommand::class,
+			ActionCommand::class,
 		];
 	}
 

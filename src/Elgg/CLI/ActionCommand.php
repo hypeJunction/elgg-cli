@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputOption;
 /**
  * route CLI command
  */
-class RouteCommand extends Command {
+class ActionCommand extends Command {
 
 	/**
 	 * {@inheritdoc}
