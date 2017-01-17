@@ -18,7 +18,7 @@ class PluginsActivateCommand extends Command {
 	protected function configure() {
 		$this->setName('plugins:activate')
 				->setDescription('Activate plugins')
-        ->addArgument('list', InputArgument::OPTIONAL, 'List of comma separated plugins to activate')
+			        ->addArgument('list', InputArgument::OPTIONAL, 'List of comma separated plugins to activate')
 				->addOption('all', null, InputOption::VALUE_NONE, 'If set, will activate all inactive plugins');
 	}
 
