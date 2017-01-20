@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 
 /**
- * plugins:activate CLI command
+ * plugins:deactivate CLI command
  */
 class PluginsDeactivateCommand extends Command {
 
@@ -57,19 +57,22 @@ class PluginsDeactivateCommand extends Command {
 			$plugins[] = elgg_get_plugin_from_id($plugin_id);
 		}
 
-		foreach ($plugins as $plugin) {
-			if (!$plugin->isActive()) {
-				continue;
-			}
+		do {
+			foreach ($plugins as $plugin) {
+				if ($plugin->isActive()) {
+					unset($plugins[$key]);
+					continue;
+				}
 
-			if (!$plugin->deactivate()) {
-				$msg = $plugin->getError();
-				$string = ($msg) ? 'admin:plugins:deactivate:no_with_msg' : 'admin:plugins:deactivate:no';
-				register_error(elgg_echo($string, array($plugin->getFriendlyName(), $plugin->getError())));
-			} else {
-				system_message("Plugin {$plugin->getFriendlyName()} has been deactivated");
+				if (!$plugin->deactivate()) {
+					$msg = $plugin->getError();
+					$string = ($msg) ? 'admin:plugins:deactivate:no_with_msg' : 'admin:plugins:deactivate:no';
+					register_error(elgg_echo($string, array($plugin->getFriendlyName(), $plugin->getError())));
+				} else {
+					system_message("Plugin {$plugin->getFriendlyName()} has been deactivated");
+				}
 			}
-		}
+		} while (count($plugins) > 0);
 
 		elgg_flush_caches();
 	}
