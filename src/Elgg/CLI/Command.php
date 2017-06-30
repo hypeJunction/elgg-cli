@@ -2,6 +2,7 @@
 
 namespace Elgg\CLI;
 
+use Elgg\CLI;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,8 +35,10 @@ abstract class Command extends SymfonyCommand {
 		$this->input = $input;
 		$this->output = $output;
 
-		elgg_register_plugin_hook_handler('forward', 'all', [$this, 'dumpRegisters']);
-		elgg_register_event_handler('send:before', 'http_response', [$this, 'dumpData']);
+		if (CLI::isInstalled()) {
+			elgg_register_plugin_hook_handler('forward', 'all', [$this, 'dumpRegisters']);
+			elgg_register_event_handler('send:before', 'http_response', [$this, 'dumpData']);
+		}
 
 		$this->login();
 
@@ -132,6 +135,9 @@ abstract class Command extends SymfonyCommand {
 	 * @throws RuntimeException
 	 */
 	final public function login() {
+		if (!CLI::isInstalled()) {
+			return;
+		}
 		if (!$this->getDefinition()->hasOption('as')) {
 			return;
 		}
@@ -154,6 +160,10 @@ abstract class Command extends SymfonyCommand {
 	 * @return void
 	 */
 	final public function logout() {
+		if (!CLI::isInstalled()) {
+			return;
+		}
+
 		if (elgg_is_logged_in()) {
 			logout();
 		}
@@ -164,6 +174,10 @@ abstract class Command extends SymfonyCommand {
 	 * @return void
 	 */
 	public function dumpRegisters() {
+		if (!CLI::isInstalled()) {
+			return;
+		}
+
 		$set = _elgg_services()->systemMessages->loadRegisters();
 
 		foreach ($set as $prop => $values) {

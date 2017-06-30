@@ -89,7 +89,7 @@ class CLI {
 	 * Check if Elgg has been installed
 	 * @return bool
 	 */
-	private function isInstalled() {
+	public static function isInstalled() {
 		$path = Local::root()->getPath('engine/settings.php');
 		if (!is_file($path)) {
 			$path = Local::root()->getPath('elgg-config/settings.php');
