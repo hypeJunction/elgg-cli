@@ -1,6 +1,6 @@
 {
     "name": "hypejunction/elgg-cli",
-	"version": "1.2.0",
+	"version": "1.2.1",
     "description": "A set of CLI tools for Elgg",
     "require": {
         "symfony/console": "^3.1",

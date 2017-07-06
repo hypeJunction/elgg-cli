@@ -1,3 +1,17 @@
+<a name="1.2.1"></a>
+## [1.2.1](https://github.com/hypeJunction/elgg-cli/compare/1.2.0...v1.2.1) (2017-07-06)
+
+
+### Bug Fixes
+
+* **installer:** install command no longer tries to use unavailable api ([db4504f](https://github.com/hypeJunction/elgg-cli/commit/db4504f))
+
+### Features
+
+* **commands:** add optional argument for plugin activate/deactivate ([fa9d89c](https://github.com/hypeJunction/elgg-cli/commit/fa9d89c))
+
+
+
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/hypeJunction/elgg-cli/compare/1.1.0...v1.2.0) (2016-08-07)
 
