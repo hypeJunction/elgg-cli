@@ -59,6 +59,9 @@ vendor/bin/elgg-cli config:path <new_path>
 # Display or change data directory path
 vendor/bin/elgg-cli config:dataroot <new_path>
 
+# Change a system or plugin setting
+vendor/bin/elgg-cli config:setting [--plugin <plugin_name>] <setting_name> <setting_new_value>
+
 # Request a page
 vendor/bin/elgg-cli route <uri> <method> [--tokens] [--export] [--as]
 

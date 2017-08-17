@@ -6,6 +6,7 @@ use Elgg\CLI\ActionCommand;
 use Elgg\CLI\AddUserCommand;
 use Elgg\CLI\ConfigDatarootCommand;
 use Elgg\CLI\ConfigPathCommand;
+use Elgg\CLI\ConfigSettingCommand;
 use Elgg\CLI\InstallCommand;
 use Elgg\CLI\PluginsActivateCommand;
 use Elgg\CLI\PluginsDeactivateCommand;
@@ -47,6 +48,7 @@ class CLI {
 			SiteUpgradeCommand::class,
 			ConfigDatarootCommand::class,
 			ConfigPathCommand::class,
+			ConfigSettingCommand::class,
 			AddUserCommand::class,
 			PluginsActivateCommand::class,
 			PluginsDeactivateCommand::class,
